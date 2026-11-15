@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="description"
+    content="A premium interactive photography gallery. Explore, search, save favourites, and upload your own images."
+  />
+
+  <title>Frame — Interactive Image Gallery</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <header class="navbar">
+    <a href="#" class="logo" aria-label="Frame home">
+      FRAME<span class="logo-dot">.</span>
+    </a>
+
+    <div class="nav-actions">
+      <button class="btn btn-outline" id="uploadBtn" type="button">
+        <span aria-hidden="true">＋</span> Upload photos
+      </button>
+
+      <input
+        id="uploadInput"
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        multiple
+        hidden
+      />
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="eyebrow">
+        <span class="status-dot"></span>
+        YOUR PERSONAL PHOTO SPACE
+      </div>
+
+      <h1>
+        Little moments.<br />
+        <span>Big feelings.</span>
+      </h1>
+
+      <p class="hero-description">
+        A collection of places, spaces, and stories worth remembering.
+        Explore the gallery or add photographs of your own.
+      </p>
+
+<!-- FRAME: floating hero photo collage -->
+<div class="frame-hero-collage" id="frameHeroCollage" aria-label="Featured photographs">
+  <div class="frame-photo frame-photo-main">
+    <img src="" alt="Featured landscape photograph" />
+    <span class="frame-photo-label">01 / MOMENTS</span>
+  </div>
+
+  <div class="frame-photo frame-photo-top">
+    <img src="" alt="Featured travel photograph" />
+  </div>
+
+  <div class="frame-photo frame-photo-bottom">
+    <img src="" alt="Featured nature photograph" />
+  </div>
+
+  <div class="frame-collage-caption">
+    <span class="frame-caption-dot"></span>
+    A LITTLE WORLD OF YOUR OWN
+  </div>
+</div>
+
+
+<div class="hero-actions">
+  <button
+    class="frame-explore-btn"
+    id="frameExploreBtn"
+    type="button"
+  >
+    Explore the gallery
+    <span aria-hidden="true">↗</span>
+  </button>
+
+  <span class="hero-note">
+    YOUR MOMENTS. YOUR FRAME.
+  </span>
+</div>
+
+      <div class="hero-meta">
+        <span id="photoCount">0 photographs</span>
+        <span class="meta-divider">/</span>
+        <span id="favouriteCount">0 favourites</span>
+      </div>
+    </section>
+
+    <!-- Search and sorting -->
+    <section class="gallery-tools" aria-label="Gallery controls">
+      <div class="search-box">
+        <span aria-hidden="true" class="search-icon">⌕</span>
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search photographs..."
+          aria-label="Search photographs by title or category"
+          autocomplete="off"
+        />
+
+        <button
+          id="clearSearchBtn"
+          class="clear-search"
+          type="button"
+          aria-label="Clear search"
+          hidden
+        >×</button>
+      </div>
+
+      <label class="sort-control">
+        <span>Sort:</span>
+        <select id="sortSelect" aria-label="Sort photographs">
+          <option value="default">Featured</option>
+          <option value="title">Name A–Z</option>
+          <option value="newest">Recently added</option>
+        </select>
+      </label>
+    </section>
+
+    <!-- Categories and favourites -->
+    <section class="filter-bar" aria-label="Filter photographs">
+      <div class="filter-list" id="categoryFilters">
+        <button
+          class="filter-btn active"
+          type="button"
+          data-filter="all"
+          aria-pressed="true"
+        >All photos</button>
+
+        <button
+          class="filter-btn"
+          type="button"
+          data-filter="nature"
+          aria-pressed="false"
+        >Nature</button>
+
+        <button
+          class="filter-btn"
+          type="button"
+          data-filter="architecture"
+          aria-pressed="false"
+        >Architecture</button>
+
+        <button
+          class="filter-btn"
+          type="button"
+          data-filter="travel"
+          aria-pressed="false"
+        >Travel</button>
+
+        <button
+          class="filter-btn"
+          type="button"
+          data-filter="uploaded"
+          aria-pressed="false"
+        >My uploads</button>
+      </div>
+
+      <button
+        id="favouritesToggle"
+        class="favourites-toggle"
+        type="button"
+        aria-pressed="false"
+      >
+        <span aria-hidden="true">♡</span>
+        Favourites
+      </button>
+    </section>
+
+    <!-- Gallery heading -->
+    <section class="gallery-section">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">THE COLLECTION</p>
+          <h2 id="galleryHeading">Selected photographs<span>.</span></h2>
+        </div>
+
+        <button id="shuffleBtn" class="shuffle-btn" type="button">
+          <span aria-hidden="true">⤨</span> Shuffle
+        </button>
+      </div>
+
+      <!-- JavaScript inserts image cards here -->
+      <div
+        class="gallery-grid"
+        id="gallery"
+        aria-label="Photograph collection"
+        aria-live="polite"
+      ></div>
+
+      <!-- Empty state -->
+      <div id="emptyState" class="empty-state" hidden>
+        <div class="empty-icon" aria-hidden="true">⌕</div>
+        <h3 id="emptyTitle">No photographs found</h3>
+        <p id="emptyMessage">
+          Try a different search or choose another category.
+        </p>
+
+        <button id="resetGalleryBtn" class="btn btn-outline" type="button">
+          Show all photographs
+        </button>
+      </div>
+
+      <div class="load-more-wrap">
+        <button id="loadMoreBtn" class="btn btn-outline" type="button">
+          Load more photographs <span aria-hidden="true">↓</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox -->
+  <div
+    class="lightbox"
+    id="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Photograph viewer"
+    aria-hidden="true"
+    hidden
+  >
+    <div class="lightbox-toolbar">
+      <a href="#" class="lightbox-brand" id="lightboxHome">
+  FRAME<span>.</span>
+</a>
+
+      <div class="lightbox-actions">
+        <button
+          id="zoomOutBtn"
+          class="icon-btn"
+          type="button"
+          aria-label="Zoom out"
+          title="Zoom out"
+        >−</button>
+
+        <span id="zoomLevel" class="zoom-level">100%</span>
+
+        <button
+          id="zoomInBtn"
+          class="icon-btn"
+          type="button"
+          aria-label="Zoom in"
+          title="Zoom in"
+        >＋</button>
+
+        <button
+          id="modalFavouriteBtn"
+          class="icon-btn"
+          type="button"
+          aria-label="Add to favourites"
+          title="Add to favourites"
+        >♡</button>
+
+        <button
+          id="downloadBtn"
+          class="icon-btn"
+          type="button"
+          aria-label="Download photograph"
+          title="Download photograph"
+        >↓</button>
+
+        <button
+          id="closeBtn"
+          class="icon-btn close-btn"
+          type="button"
+          aria-label="Close photograph viewer"
+          title="Close"
+        >×</button>
+      </div>
+    </div>
+
+    <button
+      id="prevBtn"
+      class="lightbox-arrow prev-arrow"
+      type="button"
+      aria-label="Previous photograph"
+    >‹</button>
+
+    <div class="lightbox-content">
+      <div class="lightbox-image-wrap" id="lightboxImageWrap">
+        <img id="lightboxImage" src="" alt="" />
+      </div>
+
+      <div class="lightbox-caption">
+        <div>
+          <p id="lightboxCategory" class="caption-category"></p>
+          <h2 id="lightboxTitle">Photograph</h2>
+        </div>
+
+        <p id="lightboxCount" class="lightbox-count">01 / 08</p>
+      </div>
+    </div>
+
+    <button
+      id="nextBtn"
+      class="lightbox-arrow next-arrow"
+      type="button"
+      aria-label="Next photograph"
+    >›</button>
+  </div>
+
+  <!-- Upload instructions / feedback -->
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+    hidden
+  ></div>
+
+  <footer class="footer">
+    <a href="#" class="logo">FRAME<span class="logo-dot">.</span></a>
+    <p>Made for the moments worth keeping.</p>
+    <p class="footer-credit">A FRAME FOR EVERY MEMORY</p>
+  </footer>
+</body>
+</html>
